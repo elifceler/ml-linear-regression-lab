@@ -39,3 +39,21 @@ Modeli çalıştırarak, 1200 sqft'lik bir evin fiyatı tahmin edilebilir:
 - Maliyet fonksiyonu (cost function) ekleyip `w` ve `b`’yi otomatik öğrenme  
 - Daha fazla veri ile çalışmak  
 - Gradient descent uygulamak  
+
+## 📦 Kurulum
+
+Projeyi çalıştırmak için aşağıdaki adımları takip edebilirsin:
+
+1. Gerekli kütüphaneleri yükle:
+
+```bash
+pip install -r requirements.txt
+```
+
+2. Ana dosyayı çalıştır:
+
+```bash
+python main.py
+```
+
+Grafik ile modelin tahminini ve terminal çıktısını göreceksin.
