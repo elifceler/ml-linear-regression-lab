@@ -1,6 +1,7 @@
 from data import x_train, y_train
 from model import compute_model_output
 import matplotlib.pyplot as plt
+from cost_function import compute_cost
 
 # Model parametreleri
 w = 200
@@ -31,3 +32,8 @@ predicted_price = w * x_input + b
 
 #Sonucu yazdır
 print(f"{x_input*1000:.0f} sqft'lik evin tahmini fiyatı: ${predicted_price:.0f}K")
+
+# Kayıp fonksiyonu (cost) değeri
+cost = compute_cost(x_train, y_train, w, b)
+print(f"Seçilen w={w} ve b={b} için cost (kayıp): {cost:.2f}")
+
