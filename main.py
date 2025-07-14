@@ -1,39 +1,38 @@
-from data import x_train, y_train
-from model import compute_model_output
+from src.california_housing import load_california_data
+from src.gradient_descent import gradient_descent
+from src.cost_function import compute_cost
+from src.model import compute_model_output
+import numpy as np
 import matplotlib.pyplot as plt
-from cost_function import compute_cost
 
-# Model parametreleri
-w = 200
-b = 100
+# Veriyi yükle
+x_train, x_test, y_train, y_test = load_california_data()
 
-# Modelin tahmini
-f_wb = compute_model_output(x_train, w, b)
+# Özellikleri standardize et
+mean = np.mean(x_train, axis=0)
+std = np.std(x_train, axis=0)
 
-#Veri noktalarını çiz
-plt.scatter(x_train, y_train, marker='x', color='red', label='Gerçek Değerler') #scatter noktaları bağımsız işaretler olarak gösterir
+x_train = (x_train - mean) / std
+x_test = (x_test - mean) / std
 
-# Model tahmin çizgisi
-plt.plot(x_train, f_wb, color='blue', label='Model Tahmini') # çizgi çizer, marker eklersen nokta da gösterir.
 
-#Grafik ayarları
-plt.title("Housing Prices")
-plt.xlabel("Ev Boyutu (1000 sqft)") # x ekseni etiketi
-plt.ylabel("Fiyat (1000$)") # y ekseni etiketi
-plt.legend() # etiket kutusunu göster
-plt.grid(True) # ızgara çizgileri
-plt.show() # hepsini ekrana bas
+# Başlangıç parametreleri
+initial_w = np.zeros(x_train.shape[1])
+initial_b = 0
+learning_rate = 0.01
+iterations = 1000
 
-# Tahmin yapmak istediğimiz evin büyüklüğü (1000 sqft cinsinden)
-x_input = 1.2
+# Modeli eğit
+w, b, cost_history = gradient_descent(x_train, y_train, initial_w, initial_b, learning_rate, iterations)
 
-#Modelin tahmini (vektörleşmeye gerek yok, tek sayı)
-predicted_price = w * x_input + b
+# Eğitilen parametreleri kaydet
+np.save("src/trained_weights.npy", w)
+np.save("src/trained_bias.npy", b)
 
-#Sonucu yazdır
-print(f"{x_input*1000:.0f} sqft'lik evin tahmini fiyatı: ${predicted_price:.0f}K")
-
-# Kayıp fonksiyonu (cost) değeri
-cost = compute_cost(x_train, y_train, w, b)
-print(f"Seçilen w={w} ve b={b} için cost (kayıp): {cost:.2f}")
-
+# Cost eğrisi çiz
+plt.plot(cost_history)
+plt.title("Cost Zamanla Nasıl Azaldı?")
+plt.xlabel("İterasyon")
+plt.ylabel("Cost")
+plt.grid(True)
+plt.show()
